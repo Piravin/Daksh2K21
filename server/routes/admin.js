@@ -6,10 +6,38 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const update = require('../aws');
 const bcrypt = require('bcryptjs');
+const jwt = require("jsonwebtoken");
 
 const router = Router();
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded());
+
+const authChecker = (req,res,next)=>{
+    const token = req.cookies.jwt;
+    if(token){
+        jwt.verify(token,'secret_key',(err,decoded)=>{
+            User.findOne({_id:decoded.data.id})
+                .then(user=>{
+                    if(user.group==='admin') {
+                        res.locals.user_id = user._id;
+                        next();
+                    }
+                    else
+                        res.status(401).json({error:"unauthenticated"});
+                })
+                .catch(err=>{
+                    console.log(err);
+                    res.status(500);
+                });
+
+        });
+    }
+    else{
+        res.status(401);
+        res.json({error:"unauthenticated"});
+    }
+}
+router.use(authChecker);
 
 router.route(`/department`)
     .post((req, res) => {
@@ -48,9 +76,9 @@ router.route(`/department`)
 
 router.route(`/workTemplate`)
     .post((req,res) => {
-        WorkTemplate.findOne( { name : res.body.name } )
-            .then ( work => res.status(400).json({ message : "The work allready exists" } ) )
-            .catch ( error => console.log(error.message));
+        WorkTemplate.findOne( { name : req.body.name } )
+            .then ( work => console.log(work) )
+            .catch ( error => console.log(error));
         WorkTemplate.create({
             _id : mongoose.Types.ObjectId(),
             name : req.body.name,
@@ -66,7 +94,10 @@ router.route(`/workTemplate`)
                         }
                     })
                     .then( () => res.status(200).json( { message : `Added work ${work.name}` } ) )
-                    .catch ( error => res.status(500).json( { message : error.message } ) );
+                    .catch ( error => {
+                        res.status(500).json({message: error.message});
+                        console.log(error);
+                    } );
             } )
             .catch ( error => res.status(500).json( { message : error.message } ) );
     })
@@ -185,6 +216,13 @@ router.post('/createUser', async (req,res) => {
             res.status(200).json({message: `Addeded ${user.name}`});
         } )
         .catch ( error => res.status(500).json({message : error.message}));
+});
+
+router.route('/workBasic',(req,res)=>{
+    WorkTemplate.find({})
+        .select("name _id")
+        .then( works => res.status(200).json(works))
+        .catch( error => res.status(500).json({message:error.message}));
 });
 
 

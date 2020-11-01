@@ -17,6 +17,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import React, {useState, useEffect, useRef} from 'react';
 import {BaseURL} from '../public/baseURL';
 import DialogContentText from "@material-ui/core/DialogContentText";
+import InputLabel from "@material-ui/core/InputLabel";
 
 export default function CreateWork(props){
     const [name,setName] = useState('');
@@ -25,10 +26,10 @@ export default function CreateWork(props){
     const [expense, setExpense] = useState('');
     const [open, setOpen] = useState(props.open);
     const [error,setError] = useState(false);
-    const depts = useRef([]);
+    const [depts,setDepts] = useState([]);
 
     useEffect(()=>{
-        fetch(BaseURL + 'admin/getDepartmantBasic',{
+        fetch(BaseURL + '/admin/getDepartmentBasic',{
             method:'GET',
             credentials : 'same-origin'
         })
@@ -37,7 +38,7 @@ export default function CreateWork(props){
                 return res.json();
             else throw new Error({message:res.message});
         })
-        .then(data=>depts.current = data)
+        .then(data=>setDepts(data))
         .catch(err=>console.log(err.message));
     },[name,dept,duration,expense,open])
 
@@ -61,15 +62,11 @@ export default function CreateWork(props){
                 setOpen(true);
             }
             else{
-                throw new Error(res.json().then(data=>data.message));
+                throw new Error(res.json().message);
             }
         })
-        .catch(err=>setError("Cannot connect to server"));
+        .catch(err=>setError(err.message));
     }
-
-    const deptItems = depts.current.map(dep=>{
-                            return(<MenuItem key={dep._id} value={dep.name}>{dep.name}</MenuItem>)
-                        });
     
     return(
         <>
@@ -118,6 +115,7 @@ export default function CreateWork(props){
                                 />
                         </Grid>
                         <Grid item spacing={5}>
+                            <InputLabel>Department</InputLabel>
                             <Select
                                 label="Department"
                                 value={dept}
@@ -125,7 +123,9 @@ export default function CreateWork(props){
                                 variant = "outlined"
                                 fullWidth={true}
                             >
-                                {deptItems}    
+                                {depts.map(dep=>(
+                                    <MenuItem key={dep._id} value={dep._id}>{dep.name}</MenuItem>
+                                ))}
                             </Select>
                         </Grid>
                         <Grid item spacing={5}>

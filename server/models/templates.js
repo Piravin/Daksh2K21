@@ -11,8 +11,8 @@ const workTemplate = Schema({
         type:Schema.Types.ObjectId,
         ref:"Department"
     },
-    duration : Number,
-    cost : Number
+    duration : String,
+    cost : String
 },{
     collection:"work-template"
 });

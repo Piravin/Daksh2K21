@@ -136,10 +136,10 @@ class PlanForm extends Component {
                    <Container>
                        <Grid container m={3} justify={"flex-start"} alignItems={"center"} direction={"row"} spacing={4}>
                            <Grid item xs={12} md={6}>
-                               <TextField variant={"outlined"} label = "Name" value={ this.state.name } onChange={ e => this.setState( { name : e.target.name } ) } fullWidth={true}/>
+                               <TextField variant={"outlined"} label = "Name" value={ this.state.name } onChange={ e => this.setState( { name : e.target.value } ) } fullWidth={true}/>
                            </Grid>
                            <Grid item xs={12} md={6}>
-                               <Input variant={"outlined"} label={"Images"} value={ this.state.images } type = "file" onChange={ e => this.setState( {images : e.target.files } ) }/>
+                               <Input variant={"outlined"} label={"Images"} value={ this.state.images } type = "file" onChange={ e => this.setState( {images : e.target.file } ) }/>
                            </Grid>
                            <Grid item container spacing={4} xs={12}>
                                 <Grid item xs={4}>
