@@ -37,7 +37,7 @@ const authChecker = (req,res,next)=>{
         res.json({error:"unauthenticated"});
     }
 }
-router.use(authChecker);
+// router.use(authChecker);
 
 router.route(`/department`)
     .post((req, res) => {
@@ -168,10 +168,10 @@ router.route('/plan')
         })
         .catch(err=>res.status(500).json({error:err}));
     })
-    .post(update.array('images'),(res,req)=>{
+    .post(update.single('image'),(req,res)=>{
         Plan.update({_id:req.body._id},{$set:{
-            name: res.body.name,
-            images : res.files.map( file => file.location)
+            name: req.body.name,
+            image : req.file.location
         }})
         .then(()=>res.status(200).json({message:"Created plan"}))
         .catch(err=>res.status(500).json({error:err}));
@@ -218,9 +218,9 @@ router.post('/createUser', async (req,res) => {
         .catch ( error => res.status(500).json({message : error.message}));
 });
 
-router.route('/workBasic',(req,res)=>{
+router.get('/workBasic',(req,res)=>{
     WorkTemplate.find({})
-        .select("name _id")
+        .select("name")
         .then( works => res.status(200).json(works))
         .catch( error => res.status(500).json({message:error.message}));
 });

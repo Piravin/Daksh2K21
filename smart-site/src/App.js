@@ -13,6 +13,7 @@ import AuthContextProvider from './public/authContext';
 import UserForm from "./components/userForm";
 import CustomerDashboard from "./components/customerDashboard";
 import AdminPage from "./components/adminLander";
+import 'bootstrap/dist/css/bootstrap.css';
 
 function App() {
   return (

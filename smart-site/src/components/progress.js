@@ -8,9 +8,9 @@ export function ProgressCircular (props) {
     const percentage = props.percent;
     return(
         <div className='progress-circular'>
-        <h5>Overall Completion</h5>
+        {/*<h5>Overall Completion</h5>*/}
         <CircularProgressbar styles={{root: {width: '200px'}}} className="progressClass" 
-        value={percentage} text={`${percentage}%`} />;
+        value={percentage} text={`${percentage}%`} />
         </div>
          
     )

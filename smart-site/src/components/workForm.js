@@ -59,7 +59,7 @@ export default function CreateWork(props){
         .then(res=>{
             
             if(res.ok){
-                setOpen(true);
+                props.onCloseHandler();
             }
             else{
                 throw new Error(res.json().message);

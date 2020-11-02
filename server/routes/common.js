@@ -5,7 +5,8 @@ const jwt = require('jsonwebtoken');
 const Work = require('../models/work');
 const Project = require('../models/project');
 const Message = require('../models/message');
-
+const PlanTemplate = require('../models/templates');
+const WorkTemplate = require('../models/templates');
 const router = Router();
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({extended:true}));
@@ -81,6 +82,11 @@ router.get('/message',(req,res)=>{
                 });
 
         }); }
+});
+
+router.get('/createProject',(req,res)=>{
+    let customer = '5f9ec71e47451b317cd62f9d';
+
 })
 
 module.exports = router;

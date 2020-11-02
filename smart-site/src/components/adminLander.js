@@ -124,11 +124,11 @@ class AdminPage extends Component {
                 <AdminNav/>             
             </nav>
             <main>
-                <section className="header">
+                <section className="header jumbotron ">
                     <Container>
                         <Grid container direction="row" justify="space-around" alignItems="center" spacing={2}>
                             <Grid item xs={12} md={5}>
-                                <ProgressCircular progress={progres}/>
+                                <ProgressCircular percent={40}/>
                             </Grid>
                             <Grid item xs={12} md={7}>
                                 <Box
@@ -187,6 +187,16 @@ class AdminPage extends Component {
                             ))
                         }
                     </Container>
+                </section>
+                <section className={"container"}>
+                        <div className={"row"}>
+                            <div className={"col-sm-6"}>
+
+                            </div>
+                            <div className={"col-sm-6"}>
+
+                            </div>
+                        </div>
                 </section>
             </main>
             <CreateWork open={this.state.work} onCloseHandler={this.toggleWork}/>

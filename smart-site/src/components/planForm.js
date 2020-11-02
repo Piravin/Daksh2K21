@@ -47,7 +47,7 @@ class PlanForm extends Component {
 
             // Data to post
             selectedWorks : new Set(),
-            images : [],
+            image : '',
             name : '',
 
             // Form control
@@ -67,7 +67,7 @@ class PlanForm extends Component {
     }
 
     dataFetcher() {
-        fetch(BaseURL + '/admin/workBasic')
+        fetch(BaseURL + '/admin/workBasic',{method:"GET"})
             .then ( response => {
                 if ( response.ok )
                     return response.json();
@@ -77,6 +77,10 @@ class PlanForm extends Component {
             .catch ( error => {
                 this.setState( { error : true, toastMessage : error.message } )
             })
+    }
+    componentWillMount() {
+        this.dataFetcher();
+        console.log(this.state.availableWorks);
     }
 
     handleSelect ( id ) {
@@ -92,8 +96,8 @@ class PlanForm extends Component {
         let formData = new FormData();
         formData.append( "name" , this.state.name );
         formData.append( "works" , [...this.state.selectedWorks] );
-        formData.append( "imgNo" , this.state.images.length );
-        formData.append( "images" , this.state.images );
+        // formData.append( "imgNo" , this.state.images.length );
+        formData.append( "image" , this.state.image );
 
         fetch( BaseURL + '/admin/plan' , {
             method : "POST",
